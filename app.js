@@ -12,16 +12,9 @@ var bodyParser = require('body-parser')
 const dotenv = require('dotenv');
 dotenv.config();
 
+const URI_MONGODB = process.env.DATABASE_URL;
 
 var app = express();
-
-// database
-mongoose
-    .connect(process.env.DATABASE_URL, {
-        useNewUrlParser: true,
-    })
-    .then(() => console.log("database connected successfully"))
-    .catch((err) => console.log("error connection to mongo db", err));
 
 app.use(
     '/api-docs',
@@ -30,10 +23,10 @@ app.use(
 );
 
 const PORT = process.env.PORT || 8000;
-const DOMAIN = process.env.DOMAIN_NAME || 'localhost';
+const DOMAIN = process.env.DOMAIN_NAME ? process.env.DOMAIN_NAME : 'localhost:' + PORT;
 
 app.listen(PORT, () => {
-    console.log(`Server started on ${DOMAIN}:${PORT}`);
+    console.log(`Server started on ${DOMAIN}`);
 });
 
 app.use(logger('dev'));
@@ -51,5 +44,13 @@ app.use(bodyParser.json())
 
 // router
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
+
+// database
+mongoose
+    .connect(URI_MONGODB, {
+        useNewUrlParser: true,
+    })
+    .then(() => console.log("database connected successfully"))
+    .catch((err) => console.log("error connection to mongo db", err));
 
 module.exports = app;
