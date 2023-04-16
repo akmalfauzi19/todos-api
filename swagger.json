@@ -1,0 +1,177 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "My Todos Project CRUD",
+        "description": "My Todos Project Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Todos",
+            "description": "API for todos in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/todos/create": {
+            "post": {
+                "tags": [
+                    "Todos"
+                ],
+                "description": "Create new todo in system",
+                "parameters": [
+                    {
+                        "name": "todos",
+                        "in": "body",
+                        "description": "Todos that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/todosCreate"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Todos is created",
+                        "schema": {
+                            "$ref": "#/definitions/todosCreate"
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Get all todo in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/todos"
+                        }
+                    }
+                }
+            }
+        },
+        "/todos/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of user that we want to find",
+                    "type": "string"
+                }
+            ],
+            "delete": {
+                "summary": "Delete todo with given ID",
+                "tags": [
+                    "Todos"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Todo is deleted",
+                        "schema": {
+                            "$ref": "#/definitions/todosDelete"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update user with give ID",
+                "tags": [
+                    "Todos"
+                ],
+                "parameters": [
+                    {
+                        "name": "todos",
+                        "in": "body",
+                        "description": "Todos with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/updateTodo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Todos"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "todosCreate": {
+            "required": [
+                "_id",
+                "title",
+                "content"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "title": {
+                    "type": "string",
+                    "required": true
+                },
+                "content": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "todosDelete": {
+            "required": [
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                }
+            }
+        },
+        "updateTodo": {
+            "required": [
+                "title",
+                "content"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "Todos": {
+            "type": "array",
+            "$ref": "#/definitions/todosCreate"
+        }
+    }
+}
